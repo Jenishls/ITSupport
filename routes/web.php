@@ -23,3 +23,6 @@ Route::get('/user/list', 'HomeController@listUser')->name('listUser');
 Route::get('/user/{user}', 'HomeController@editUser')->name('editUser');
 Route::POST('/user/update', 'HomeController@updateUser')->name('updateUser');
 Route::POST('/user/passwordReset', 'HomeController@passwordReset')->name('passwordReset');
+
+
+
