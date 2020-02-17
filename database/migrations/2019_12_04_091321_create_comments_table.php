@@ -33,6 +33,7 @@ class CreateCommentsTable extends Migration
             $table->foreign('deleted_by')
                     ->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
