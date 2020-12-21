@@ -15,7 +15,7 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'Vendor\VendorController@index')->name('home');
 
 Route::get('/user/create', 'HomeController@createUser')->name('createUser');
 Route::POST('/user/create', 'HomeController@storeUser')->name('storeUser');
