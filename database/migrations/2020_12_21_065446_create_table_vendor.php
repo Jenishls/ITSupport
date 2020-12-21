@@ -30,7 +30,7 @@ class CreateTableVendor extends Migration
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->foreign('deleted_by')
                     ->references('id')->on('users');
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }
