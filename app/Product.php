@@ -5,14 +5,18 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Vendor extends Model
+class Product extends Model
 {
   use SoftDeletes;
 
-  protected $table = 'vendor';
+  protected $table = 'product';
   protected $primary = 'id';
-  protected $fillable = ['name','address','pan','created_by','updated_by','deleted_by'];
+  protected $fillable = ['name','vendor_id','created_by','updated_by','deleted_by'];
   public $timestamps = true;
+
+  public function vendor(){
+  	return $this->belongsTo('App\Vendor','vendor_id');
+  }
 
   public function createdBy(){
   	return $this->belongsTo('App\User','created_by');
@@ -21,8 +25,4 @@ class Vendor extends Model
   public function updatedBy(){
       return $this->belongsTo('App\User','updated_by');
   }
-
-      public function products(){
-        return $this->hasMany('App\Product','vendor_id');
-    }
 }

@@ -10,7 +10,7 @@
 		<div class="m-portlet__head-tools">
 			<ul class="m-portlet__nav">
 				<li class="m-portlet__nav-item">
-					<a href="{{route('vendorCreate')}}" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
+					<a href="{{route('createVendor')}}" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
 						<span>
 							<i class="la la-plus"></i>
 							<span>Create Vendor</span>
@@ -28,18 +28,30 @@
 					<th class="sorting">ID</th>
 					<th class="sorting">Name</th>
 					<th class="sorting">PAN</th>
-			</tr>
+					<th class="sorting" width="15%">Action</th>
+				</tr>
 			</thead>
 			<tbody>
 
 				@forelse($datas as $data)
 					<tr>
-						<td><a href="vendor/{{$data->id}}">{{$data->id}}</a></td>
+						<td>{{$data->id}}</td>
 						<td>
-							{{ucfirst($data->name)}}
+							<a href="{{route('showVendor',[$data->id])}}">{{ucfirst($data->name)}}</a>
 						</td>
 						<td>
-							{{$data->pan}}
+							<a href="{{route('showVendor',[$data->id])}}">{{$data->pan}}</a>
+						</td>
+						<td>
+							
+							<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+								<a href="{{route('editVendor',[$data->id])}}">
+									<button type="button" class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-metal m-btn--gradient-to-accent"><i class="la la-edit"></i></button>
+								</a>
+								<a href="{{route('deleteVendor',[$data->id])}}">
+									<button type="button" class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger"><i class="la la-trash-o"></i></button>
+								</a>
+							</div>
 						</td>
 					</tr>
 				@empty

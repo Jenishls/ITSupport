@@ -29,10 +29,15 @@ class VendorController extends Controller
     	$datas = Vendor::all();
       return view('vendor.dashboard',compact('datas'));
     }
+    
+    public function show($id)
+    {
+    	$data = Vendor::findorfail($id);
+    	return view('vendor.show',compact('data'));
+    }
 
     public function create()
     {
-    	$datas = Vendor::all();
       return view('vendor.create');
     }
 
@@ -45,5 +50,29 @@ class VendorController extends Controller
             'created_by' => auth()->user()->id 
         ]);
         return redirect('/');
+    }
+
+    public function edit($id)
+    {
+    	$data = Vendor::find($id);
+    	return view('vendor.edit',compact('data'));
+    }
+
+    public function update(Request $request)
+    {
+      Vendor::where('id',$request->vendor_id)
+                ->update([
+                        'name' => $request->name,
+                        'address' => $request->address,
+                        'pan' => $request->pan,
+                        'updated_by' => $request->updated_by, 
+                ]);
+        return redirect()->route('home');
+    }
+
+    public function destroy($id)
+    {
+        Vendor::destroy($id);
+        return redirect()->route('home');
     }
 }
