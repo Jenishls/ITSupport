@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Product;
+namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -25,8 +25,7 @@ class ProductController extends Controller
      */
     public function create($id)
     {
-
-        return view('product.create',compact('id'));
+        return view('vendor.product.create',compact('id'));
     }
 
     /**
@@ -53,7 +52,9 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Product::find($id);
+        // dd( $data->bill );
+        return view( 'vendor.product.show' ,compact('data') );
     }
 
     /**
@@ -64,7 +65,8 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = Product::find($id);
+        return view('vendor.product.edit',compact('data'));
     }
 
     /**
@@ -74,9 +76,15 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        // dd($request->all());
+        Product::where('id',$request->id)
+                ->update([
+                        'name' => $request->name,
+                        'updated_by' => $request->updated_by, 
+                ]);
+        return redirect()->route('showVendor', [$request->vendor_id]);
     }
 
     /**
@@ -85,8 +93,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($vendor_id,$id)
     {
-        //
+        Product::destroy($id);
+        return redirect()->route('showVendor',[$vendor_id]);
     }
 }

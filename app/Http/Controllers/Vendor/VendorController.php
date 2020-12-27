@@ -72,7 +72,12 @@ class VendorController extends Controller
 
     public function destroy($id)
     {
-        Vendor::destroy($id);
-        return redirect()->route('home');
+        if(!Vendor::find($id)->product()->exists() )
+        {
+            Vendor::destroy($id);
+            return redirect()->route('home');
+        }
+        $messages = ['Cannot delete Vendor.Vendor has products','Delete its corresponding products first'];
+        return redirect()->route('home')->withErrors($messages);
     }
 }

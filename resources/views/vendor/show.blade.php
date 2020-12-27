@@ -10,7 +10,7 @@
 				</span>
 				<h3 class="m-portlet__head-text">
 					{{ucfirst($data->name)}}
-					{{-- {{dd( $data->products ) }} --}}
+					{{-- {{dd( $data ) }} --}}
 				</h3>
 			</div>
 		</div>
@@ -45,21 +45,23 @@
 
 			<!--begin::Widget5-->
 			<div class="m-widget4">
-				@forelse($data->products as $product)
+				@forelse($data->product as $product)
 				<div class="m-widget4__item">
 					<div class="m-widget4__info">
-						<span class="m-widget4__title">
-							{{ucfirst($product->name)}}
-						</span><br>
+						<a href="{{route('showProduct',[$product->id])}}">
+							<span class="m-widget4__title">
+								{{ucfirst($product->name)}}
+							</span>
+						</a><br>
 						<span class="m-widget4__sub">
 							
 						</span>
 					</div>
 					<div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-						<a href="{{route('editProduct',[$data->id])}}">
+						<a href="{{route('editProduct',[$product->id])}}">
 							<i class="la la-edit"></i>
 						</a>
-						<a href="{{route('deleteProduct',[$data->id])}}">
+						<a href="{{route('deleteProduct', ['vendor_id' => $product->vendor_id , 'id' => $product->id] )}}">
 							<i class="la la-trash-o"></i>
 						</a>
 					</div>

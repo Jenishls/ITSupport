@@ -22,7 +22,7 @@ class Vendor extends Model
       return $this->belongsTo('App\User','updated_by');
   }
 
-      public function products(){
-        return $this->hasMany('App\Product','vendor_id');
-    }
+  public function product(){
+    return $this->hasMany('App\Product','vendor_id');
+  }
 }
