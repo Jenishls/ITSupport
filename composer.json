@@ -14,6 +14,7 @@
         "jakub-klapka/laravel-windows-auth": "^1.0",
         "laravel/framework": "^6.2",
         "laravel/tinker": "^1.0",
+        "laravelcollective/html": "^6.2",
         "orangehill/iseed": "^2.6"
     },
     "require-dev": {

@@ -17,12 +17,28 @@
 	<form method="POST" action="{{route('storeBill')}}" class="m-form m-form--fit m-form--label-align-right">
 		@csrf
 		<input type="hidden" name="created_by" value="{{auth()->user()->id}}">
-		<input type="hidden" name="product_id" value="{{$id}}">
+		<input type="hidden" name="product_id" value="{{$id}}" id="product_id">
+		<input type="hidden" name="vendor_id" value="{{$product->vendor->id}}" id="product_id">
 		<div class="m-portlet__body">
 			<div class="form-group m-form__group">
-				<label for="exampleInputTitle">Name</label>
-				<input type="text" class="form-control m-input m-input--solid" id="exampleInputTitle" aria-describedby="title" placeholder="Enter Name" name="name" required="">
+				<label for="txtName">Name</label>
+				<input type="text" class="form-control m-input m-input--solid" id="txtName" aria-describedby="title" placeholder="Enter Name" name="name" required="">
 			</div>
+
+			<div class="form-group m-form__group ">
+				<label >File</label>
+				<div class=" mt-2" >
+					<div class="m-dropzone  m-dropzone--success dz-clickable" id="fileUpload">
+						
+						<div class="m-dropzone__msg dz-message needsclick">
+							<h3 class="m-dropzone__msg-title">Drop files here or click to upload.</h3>
+							<span class="m-dropzone__msg-desc">Only image, pdf and psd files are allowed for upload</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
 
 		</div>
 		<div class="m-portlet__foot m-portlet__foot--fit">
@@ -31,72 +47,58 @@
 			</div>
 		</div>
 	</form>
-
 	<!--end::Form-->
-
-	<!--begin::Form-->
-		<form class="m-form m-form--fit m-form--label-align-right" enctype="multipart/form-data" >
-			@csrf
-			<div class="m-portlet__body">
-				<div class="form-group m-form__group row">
-					<label class="col-form-label col-lg-1 col-sm-12">Bill</label>
-					<div class="col-lg-4 col-md-9 col-sm-12">
-						<div class="m-dropzone dropzone m-dropzone--success" id="fileUpload" action=" {{route('uploadBill')}} " name='files' >
-							
-							<div class="m-dropzone__msg dz-message needsclick">
-								<h3 class="m-dropzone__msg-title">Drop files here or click to upload.</h3>
-								<span class="m-dropzone__msg-desc">Only image and pdf files are allowed for upload</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="m-portlet__foot m-portlet__foot--fit">
-				<div class="m-form__actions m-form__actions">
-					<div class="row">
-						<div class="col-lg-12 ml-lg-auto">
-							<button type="reset" class="btn btn-brand">Submit</button>
-							<button type="reset" class="btn btn-secondary">Cancel</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</form>
-	<!--end::Form-->
-</div>
 
 <!--end::Portlet-->
 @endsection
 @extends('layouts.master')
 @section('js')
-	<script type="text/javascript">
-		Dropzone.autoDiscover = false;
-		// autoProcessQueue: false
-		// Dropzone.autoDiscover = false;
-		// Dropzone.options.fileUpload = {
-		//   paramName: "file", // The name that will be used to transfer the file
-		//   maxFilesize: 2, // MB
-		//   autoProcessQueue: false,
-		//   accept: function(file, done) {
-		//   	// debugger;
-		//     if (file.name == "justinbieber.jpg") {
-		//       done("Naha, you don't.");
-		//     }
-		//     else { done(); }
-		//   }
-		// }
-$(document).ready(function(){
-		var DropzoneDemo={init:function(){
-		
-			Dropzone.options.fileUpload={
-				autoProcessQueue: false,
-				paramName:"file",maxFiles:10,maxFilesize:10,addRemoveLinks:!0,
-				acceptedFiles:"image/*,application/pdf",
-				accept:function(e,o){
-					"1.jpg"==e.name?o("Naha, you don't."):o()
-				}
-			}}};DropzoneDemo.init();
-		});
-	</script>
+<script type="text/javascript">
+	Dropzone.autoDiscover = false;
+	// console.log(window.Dropzone)
+	// var myDropzone = new Dropzone("#fileUpload");
+
+ //  myDropzone.options.acceptedFiles = "image/*,application/pdf";
+ //  myDropzone.options.addRemoveLinks = true;
+ //  myDropzone.options.success()
+	console.log(Dropzone.options);
+
+	var token = "{!! csrf_token() !!}";
+	Dropzone.options.fileUpload = {
+    url: "{{route('uploadBill')}}",
+
+    paramName: "file",
+    acceptedFiles: "image/*,application/pdf",
+    addRemoveLinks : true,
+    params: {
+        _token: token
+    },
+    init: function() {
+        
+        this.on("success", function(file, response) {
+        	// console.log(response);
+        	if(response.status == 'success' ){
+            let element = `<input type="hidden" class="newVal" name="file[]" value="${response.message}" data-id = "${response.message}">`
+            $('#product_id').after(element);
+        	}
+        });
+
+        this.on("removedfile",function(file){
+        	x = confirm('Do you want to delete?');
+			    if(!x) 
+			    { 
+			    	return false
+			    }
+			    else
+			    {
+			    	console.log( file.name.substr(-5) )
+			    };
+        })
+    }
+}
+
+$('#fileUpload').dropzone();
+
+</script>
 
 @endsection
